@@ -9,7 +9,9 @@ AuthService;
   styleUrls: ['./taskdashboard.component.css'],
 })
 export class TaskdashboardComponent implements OnInit {
-  constructor(public auth: AuthService, private router: Router) {}
+  constructor(public auth: AuthService, private router: Router) {
+    auth.calendarItems = [];
+  }
 
   ngOnInit(): void {}
 

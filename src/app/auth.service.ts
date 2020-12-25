@@ -46,16 +46,29 @@ export class AuthService {
       gapi.client.init({
         apiKey: 'AIzaSyDm-NDiS5UIi2A0YVwiTH3mrtonl-Qep-w',
         clientId:
-          '306901841082-v8u3mhnlnk45o4tpuj2enbcm4a7vn8o1.apps.googleusercontent.com',
+          '814788778570-n2bpgvbop3mtu6humnb0ot0a1t5efdms.apps.googleusercontent.com',
         dicoveryDocs: [
           'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
         ],
         scope: 'https://www.googleapis.com/auth/calendar',
       });
 
-      // gapi.client.loaded('calendar', 'v3', () => {
-      //   console.log('calendar loaded');
-      // });
+      gapi.client.load(
+        'calendar',
+        'v3',
+        () => {
+          console.log('calendar loaded');
+        },
+        function (err, event) {
+          if (err) {
+            console.log(
+              'There was an error contacting the Calendar service: ' + err
+            );
+            return;
+          }
+          console.log('Event created: %s', event.htmlLink);
+        }
+      );
     });
   }
 
@@ -106,4 +119,60 @@ export class AuthService {
     await this.afAuth.signOut();
     this.router.navigate(['/']);
   }
+
+  async getCalendar() {
+    const events = await gapi.client.calendar.events.list(
+      {
+        calendarId: 'primary',
+        timeMin: new Date().toISOString(),
+        showDeleted: false,
+        singleEvents: true,
+        maxResults: 10,
+        orderBy: 'startTime',
+      },
+      function (err, event) {
+        if (err) {
+          console.log(
+            'There was an error contacting the Calendar service: ' + err
+          );
+          return;
+        }
+        console.log('Event created: %s', event.htmlLink);
+      }
+    );
+
+    console.log(events);
+    this.calendarItems = events.result.items;
+    console.log(this.calendarItems);
+  }
+
+  async insertEvent() {
+    const insert = await gapi.client.calendar.events.insert(
+      {
+        calendarId: 'primary',
+        end: {
+          dateTime: 'hoursFromNow(3)',
+          timeZone: 'Asia/Kolkata',
+        },
+        start: {
+          dateTime: 'hoursFromNow(2)',
+          timeZone: 'Asia/Kolkata',
+        },
+        summary: 'Have Fun',
+        description: 'Do something cool',
+      },
+      function (err, event) {
+        if (err) {
+          console.log(
+            'There was an error contacting the Calendar service: ' + err
+          );
+          return;
+        }
+        console.log('Event created: %s', event.htmlLink);
+      }
+    );
+    await this.getCalendar();
+  }
 }
+const hoursFromNow = (n) =>
+  new Date(Date.now() + n * 1000 * 60 * 60).toISOString();
