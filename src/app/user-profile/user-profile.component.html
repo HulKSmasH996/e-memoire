@@ -1,0 +1,51 @@
+<mat-toolbar color="primary">
+  <button
+    mat-icon-button
+    class="example-icon keyboard_backspace-icon"
+    (click)="onClickBack()"
+  >
+    <mat-icon>keyboard_backspace</mat-icon>
+  </button>
+  <span class="example-fill-remaining-space"></span>
+  <span>My Profile </span>
+  <span class="example-fill-remaining-space"></span>
+  <button
+    mat-icon-button
+    class="example-icon login-icon"
+    (click)="auth.signOut()"
+  >
+    <mat-icon>login</mat-icon>
+  </button>
+</mat-toolbar>
+<div *ngIf="auth.user$ | async; then authenticated; else guest">
+  <!-- template will replace this div -->
+</div>
+
+<!-- User NOT logged in -->
+<ng-template #guest>
+  <h3>Howdy, GUEST</h3>
+  <p>Login to get started...</p>
+
+  <button (click)="auth.googleSignin()">
+    <i class="fa fa-google"></i> Connect Google
+  </button>
+</ng-template>
+
+<!-- User logged in -->
+<ng-template #authenticated>
+  <div
+    *ngIf="auth.user$ | async as user"
+    style="text-align: center; margin: 50px"
+  >
+    <!-- <img style="border-radius: 50%" [src]="user.photoURL" />
+    <h3>Howdy, {{ user.displayName }}</h3>
+    <p>UID: {{ user.uid }}</p>
+    <button (click)="auth.signOut()">Logout</button> -->
+    <img style="border-radius: 50%" [src]="user.photoURL" />
+    <mat-card style="margin: 25px; padding: 25px">
+      <mat-card-title>{{ user.displayName }}</mat-card-title>
+      <mat-card-footer>{{ user.uid }}</mat-card-footer>
+      <mat-card-content>{{ user.email }} </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

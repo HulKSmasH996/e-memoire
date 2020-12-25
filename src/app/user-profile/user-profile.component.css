@@ -1,0 +1,10 @@
+#user-profile-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.example-fill-remaining-space {
+  flex: 1 1 auto;
+}

@@ -1,0 +1,56 @@
+<mat-toolbar color="primary">
+  <span class="example-fill-remaining-space"></span>
+  <span>E - Memoire </span>
+  <span class="example-fill-remaining-space"></span>
+  <button
+    mat-icon-button
+    class="example-icon info-icon"
+    (click)="onClickAbout()"
+  >
+    <mat-icon>info</mat-icon>
+  </button>
+</mat-toolbar>
+<div id="loginBlock">
+  <div id="left">
+    <img
+      style="margin-left: 150px"
+      width="200px"
+      height="200px"
+      src="assets/tasks.png"
+    />
+    <h1 style="margin-left: 150px; margin-top: 40px; font-size: 40px">
+      E - Memoire
+    </h1>
+  </div>
+  <div id="right">
+    <h1>
+      Regain clarity and calmness by getting all those tasks out of your head
+      and onto your to-do list
+    </h1>
+    <ul>
+      <li>Manage tasks effectively</li>
+      <li>See all of the items at a glance and prioritize</li>
+      <li>Maintain timelines</li>
+    </ul>
+    <!-- <button mat-raised-button (click)="authService.googleSignin()">
+      Log in with Google
+    </button> -->
+    <div style="margin: 20px" class="row" (click)="authService.googleSignin()">
+      <div>
+        <a
+          class="btn btn-outline-dark"
+          role="button"
+          style="text-transform: none"
+        >
+          <img
+            width="20px"
+            style="margin-bottom: 3px; margin-right: 5px"
+            alt="Google sign-in"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"
+          />
+          Login with Google
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
