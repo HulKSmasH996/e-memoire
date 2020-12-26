@@ -36,6 +36,9 @@
     <button mat-raised-button color="primary" (click)="auth.getCalendar()">
       Get Google Calendar
     </button>
+    <button mat-raised-button color="red" (click)="auth.deleteEvent()">
+      Delete Event
+    </button>
     <button mat-raised-button color="accent" (click)="auth.insertEvent()">
       Insert Event
     </button>
@@ -45,6 +48,7 @@
         <em>Created - {{ item.created }}</em>
       </p>
       <p>{{ item.description }}</p>
+      <p>{{ item.id }}</p>
       <hr />
     </div>
   </div>

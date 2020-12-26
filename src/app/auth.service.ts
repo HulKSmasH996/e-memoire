@@ -9,6 +9,7 @@ import {
 } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+//import { HttpClient } from '@angular/common/http';
 
 declare var gapi: any;
 
@@ -20,6 +21,7 @@ export class AuthService {
 
   calendarItems: any[];
   constructor(
+    // private http: HttpClient,
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private router: Router
@@ -145,32 +147,56 @@ export class AuthService {
     this.calendarItems = events.result.items;
     console.log(this.calendarItems);
   }
-
+  async deleteEvent() {
+    await gapi.client.calendar.events.delete({
+      calendarId: 'primary',
+      eventId: '6ie29736l71a8kgevl51p1b003',
+    });
+    await this.getCalendar();
+  }
   async insertEvent() {
-    const insert = await gapi.client.calendar.events.insert(
-      {
-        calendarId: 'primary',
-        end: {
-          dateTime: 'hoursFromNow(3)',
-          timeZone: 'Asia/Kolkata',
-        },
-        start: {
-          dateTime: 'hoursFromNow(2)',
-          timeZone: 'Asia/Kolkata',
-        },
-        summary: 'Have Fun',
-        description: 'Do something cool',
+    //console.log(hoursFromNow(4));
+    await gapi.client.calendar.events.insert({
+      // mimeType: 'application/json',
+      calendarId: 'primary',
+      //text: 'testevent',
+      end: {
+        dateTime: hoursFromNow(0.45).toString(),
+        timeZone: 'Asia/Kolkata',
       },
-      function (err, event) {
-        if (err) {
-          console.log(
-            'There was an error contacting the Calendar service: ' + err
-          );
-          return;
-        }
-        console.log('Event created: %s', event.htmlLink);
-      }
-    );
+      start: {
+        dateTime: hoursFromNow(0.25).toString(),
+        timeZone: 'Asia/Kolkata',
+      },
+      summary: 'Have Fun',
+      description: 'Do something cool',
+    });
+
+    //   const headers = {
+    //     Authorization:
+    //       'Bearer 814788778570-n2bpgvbop3mtu6humnb0ot0a1t5efdms.apps.googleusercontent.com',
+    //     Key: 'AIzaSyDm-NDiS5UIi2A0YVwiTH3mrtonl-Qep-w',
+    //   };
+    //   this.http
+    //     .post(
+    //       'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+    //       JSON.stringify({
+    //         end: {
+    //           dateTime: '2020-12-28T16:00:00',
+    //           date: '2020-12-28',
+    //           timeZone: 'Europe/London',
+    //         },
+    //         start: {
+    //           dateTime: '2020-12-28T15:00:00',
+    //           date: '2020-12-28',
+    //           timeZone: 'Europe/London',
+    //         },
+    //       }),
+    //       { headers }
+    //     )
+    //     .subscribe((data) => {
+    //       console.log(data);
+    //     });
     await this.getCalendar();
   }
 }
