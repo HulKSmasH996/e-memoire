@@ -55,22 +55,9 @@ export class AuthService {
         scope: 'https://www.googleapis.com/auth/calendar',
       });
 
-      gapi.client.load(
-        'calendar',
-        'v3',
-        () => {
-          console.log('calendar loaded');
-        },
-        function (err, event) {
-          if (err) {
-            console.log(
-              'There was an error contacting the Calendar service: ' + err
-            );
-            return;
-          }
-          console.log('Event created: %s', event.htmlLink);
-        }
-      );
+      gapi.client.load('calendar', 'v3', () => {
+        console.log('calendar loaded');
+      });
     });
   }
 
@@ -95,6 +82,7 @@ export class AuthService {
     //   displayName: gapiUser.getName(),
     //   photoURL: gapiUser.getImageUrl(),
     // };
+    //console.log(this.getCalendar());
     this.router.navigate(['tasks']);
     return this.updateUserData(afauthusr.user);
   }
@@ -123,25 +111,14 @@ export class AuthService {
   }
 
   async getCalendar() {
-    const events = await gapi.client.calendar.events.list(
-      {
-        calendarId: 'primary',
-        timeMin: new Date().toISOString(),
-        showDeleted: false,
-        singleEvents: true,
-        maxResults: 10,
-        orderBy: 'startTime',
-      },
-      function (err, event) {
-        if (err) {
-          console.log(
-            'There was an error contacting the Calendar service: ' + err
-          );
-          return;
-        }
-        console.log('Event created: %s', event.htmlLink);
-      }
-    );
+    const events = await gapi.client.calendar.events.list({
+      calendarId: 'primary',
+      timeMin: new Date().toISOString(),
+      showDeleted: false,
+      singleEvents: true,
+      maxResults: 10,
+      orderBy: 'startTime',
+    });
 
     console.log(events);
     this.calendarItems = events.result.items;
@@ -157,9 +134,7 @@ export class AuthService {
   async insertEvent() {
     //console.log(hoursFromNow(4));
     await gapi.client.calendar.events.insert({
-      // mimeType: 'application/json',
       calendarId: 'primary',
-      //text: 'testevent',
       end: {
         dateTime: hoursFromNow(0.45).toString(),
         timeZone: 'Asia/Kolkata',
@@ -171,32 +146,6 @@ export class AuthService {
       summary: 'Have Fun',
       description: 'Do something cool',
     });
-
-    //   const headers = {
-    //     Authorization:
-    //       'Bearer 814788778570-n2bpgvbop3mtu6humnb0ot0a1t5efdms.apps.googleusercontent.com',
-    //     Key: 'AIzaSyDm-NDiS5UIi2A0YVwiTH3mrtonl-Qep-w',
-    //   };
-    //   this.http
-    //     .post(
-    //       'https://www.googleapis.com/calendar/v3/calendars/primary/events',
-    //       JSON.stringify({
-    //         end: {
-    //           dateTime: '2020-12-28T16:00:00',
-    //           date: '2020-12-28',
-    //           timeZone: 'Europe/London',
-    //         },
-    //         start: {
-    //           dateTime: '2020-12-28T15:00:00',
-    //           date: '2020-12-28',
-    //           timeZone: 'Europe/London',
-    //         },
-    //       }),
-    //       { headers }
-    //     )
-    //     .subscribe((data) => {
-    //       console.log(data);
-    //     });
     await this.getCalendar();
   }
 }
